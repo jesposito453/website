@@ -1,0 +1,64 @@
+/*
+  theme.css -- Story & Measure theme overrides.
+
+  Palette and type modeled on the Squarespace "Ortiz Fluid" demo:
+  warm cream ground, deep forest-green ink, vivid orange as the working
+  accent, with pale lavender and chartreuse as supporting washes.
+  Headings use Fraunces (a close free stand-in for Swear Display);
+  body stays on Inter.
+
+  Every token default lives in src/styles/tokens.css. Declarations here
+  are unlayered, so they always beat the @layer base defaults.
+*/
+
+:root {
+	/* Ground + ink */
+	--color-bg: light-dark(#fff6ed, #12241a);
+	--color-text: light-dark(#194027, #f5ecdf);
+	--color-muted: light-dark(#5c7263, #a4b8aa);
+	--color-border: light-dark(#ecdccb, #2d4a38);
+	--color-surface: light-dark(#fbeee0, #1a3324);
+
+	/* Orange is the working accent (buttons, links, highlights) */
+	--color-brand: light-dark(#e5601f, #f08b57);
+	--color-brand-strong: light-dark(#cf5015, #ed6b2d);
+	--color-brand-soft: light-dark(#f08b57, #f4a97f);
+	--color-accent: light-dark(#ed6b2d, #f4a97f);
+	--color-accent-soft: #f6e1fd; /* pale lavender wash */
+	--color-on-brand: #fff6ed;
+
+	/* Mostly-flat brand: gradients kept subtle and warm; the hero glow
+	   carries the "fluid" lavender-to-chartreuse wash from the demo. */
+	--gradient-brand: linear-gradient(135deg, #e5601f, #ed6b2d);
+	--gradient-brand-strong: linear-gradient(135deg, #cf5015, #e5601f);
+	--gradient-brand-soft: linear-gradient(135deg, #f6e1fd, #eff483);
+	--gradient-headline: linear-gradient(135deg, var(--color-text), var(--color-text));
+
+	/* Editorial serif display over Inter body */
+	--font-heading: var(--font-display, var(--font-body));
+	--font-weight-heading: 600;
+	--font-weight-display: 560;
+	--tracking-tight: -0.015em;
+	--tracking-snug: -0.005em;
+	--leading-tight: 1.05;
+
+	/* Softer, more editorial shapes */
+	--radius-sm: 4px;
+	--radius: 8px;
+	--radius-lg: 14px;
+}
+
+/* Light-mode fallback for browsers without light-dark() */
+@supports not (color: light-dark(#000, #fff)) {
+	:root {
+		--color-bg: #fff6ed;
+		--color-text: #194027;
+		--color-muted: #5c7263;
+		--color-border: #ecdccb;
+		--color-surface: #fbeee0;
+		--color-brand: #e5601f;
+		--color-brand-strong: #cf5015;
+		--color-brand-soft: #f08b57;
+		--color-accent: #ed6b2d;
+	}
+}

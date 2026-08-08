@@ -1,0 +1,280 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "Story & Measure",
+		"description": "Marketing services site for Story & Measure, the studio of Jodi Esposito",
+		"author": "Story & Measure"
+	},
+	"settings": {
+		"title": "Story & Measure",
+		"tagline": "Marketing that tells a true story — and proves it with numbers."
+	},
+	"collections": [
+		{
+			"slug": "pages",
+			"label": "Pages",
+			"labelSingular": "Page",
+			"supports": ["drafts", "revisions", "seo"],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "content",
+					"label": "Content",
+					"type": "portableText"
+				}
+			]
+		}
+	],
+	"menus": [
+		{
+			"name": "primary",
+			"label": "Primary Navigation",
+			"items": [
+				{
+					"type": "custom",
+					"label": "Services",
+					"url": "/#features"
+				},
+				{
+					"type": "custom",
+					"label": "Packages",
+					"url": "/pricing"
+				},
+				{
+					"type": "custom",
+					"label": "Contact",
+					"url": "/contact"
+				}
+			]
+		},
+		{
+			"name": "footer_product",
+			"label": "Footer: Services",
+			"items": [
+				{ "type": "custom", "label": "Services", "url": "/#features" },
+				{ "type": "custom", "label": "Packages", "url": "/pricing" },
+				{ "type": "custom", "label": "Client stories", "url": "/#testimonials" }
+			]
+		},
+		{
+			"name": "footer_company",
+			"label": "Footer: Studio",
+			"items": [
+				{ "type": "custom", "label": "About Jodi", "url": "/#about" },
+				{ "type": "custom", "label": "FAQ", "url": "/#faq" },
+				{ "type": "custom", "label": "Contact", "url": "/contact" }
+			]
+		},
+		{
+			"name": "footer_support",
+			"label": "Footer: Connect",
+			"items": [
+				{ "type": "custom", "label": "Email", "url": "mailto:hello@storyandmeasure.com" },
+				{ "type": "custom", "label": "LinkedIn", "url": "https://www.linkedin.com/" },
+				{ "type": "custom", "label": "Instagram", "url": "https://www.instagram.com/" }
+			]
+		}
+	],
+	"content": {
+		"pages": [
+			{
+				"id": "home",
+				"slug": "home",
+				"status": "published",
+				"data": {
+					"title": "Home",
+					"content": [
+						{
+							"_type": "marketing.hero",
+							"_key": "hero",
+							"headline": "Marketing with a story worth telling — and numbers worth keeping.",
+							"subheadline": "Story & Measure is the marketing studio of Jodi Esposito. Brand narrative, campaigns, and analytics for small businesses and founders who need every marketing dollar to earn its keep.",
+							"primaryCtaLabel": "Book a Discovery Call",
+							"primaryCtaUrl": "/contact",
+							"secondaryCtaLabel": "See Packages",
+							"secondaryCtaUrl": "/pricing"
+						},
+						{
+							"_type": "marketing.features",
+							"_key": "features",
+							"headline": "What the studio does",
+							"subheadline": "Every engagement pairs the two halves of the name: a story your customers repeat, and a measurement plan that shows whether it worked.",
+							"features": [
+								{
+									"icon": "star",
+									"title": "Brand & Messaging",
+									"description": "Positioning, voice, and a messaging house you can hand to any writer or agency and get consistent work back."
+								},
+								{
+									"icon": "heart",
+									"title": "Content Marketing",
+									"description": "Editorial calendars, newsletters, and long-form content built around what your customers actually search for and share."
+								},
+								{
+									"icon": "globe",
+									"title": "Campaign Strategy",
+									"description": "Launches, seasonal pushes, and paid campaigns planned end to end — channels, creative briefs, budgets, and timing."
+								},
+								{
+									"icon": "chart",
+									"title": "Analytics & Reporting",
+									"description": "A measurement plan before the first post goes out, and a monthly dashboard that answers \"was it worth it?\" in plain English."
+								},
+								{
+									"icon": "users",
+									"title": "Audience Research",
+									"description": "Customer interviews and survey programs that replace guessing with quotes and data you can build campaigns on."
+								},
+								{
+									"icon": "zap",
+									"title": "Launch Sprints",
+									"description": "Six-week engagements to take one product, service, or rebrand from rough idea to live campaign with clear success criteria."
+								}
+							]
+						},
+						{
+							"_type": "marketing.testimonials",
+							"_key": "testimonials",
+							"headline": "What clients say",
+							"testimonials": [
+								{
+									"quote": "Jodi rewrote our story in a way that finally sounded like us — then showed us, month by month, that it was pulling in better-fit customers.",
+									"author": "Dana Whitfield",
+									"role": "Owner",
+									"company": "Bluestem Kitchen & Provisions"
+								},
+								{
+									"quote": "We'd been running ads on instinct for two years. Story & Measure cut our spend by a third and our inbound leads went up. The dashboard alone is worth the retainer.",
+									"author": "Marcus Tran",
+									"role": "Co-founder",
+									"company": "Fieldnote Software"
+								},
+								{
+									"quote": "The launch sprint was the most organized six weeks of marketing we've ever done. Clear plan, clear numbers, no fluff.",
+									"author": "Priya Raman",
+									"role": "Founder",
+									"company": "Willow & Weld Studio"
+								}
+							]
+						},
+						{
+							"_type": "marketing.faq",
+							"_key": "faq",
+							"headline": "Frequently asked questions",
+							"items": [
+								{
+									"question": "Who is Story & Measure for?",
+									"answer": "Small businesses, founders, and lean teams — usually without a full-time marketer — who want senior-level marketing strategy without hiring an agency of record. Jodi works with a small number of clients at a time so every engagement gets principal-level attention."
+								},
+								{
+									"question": "Who will I actually work with?",
+									"answer": "Jodi Esposito, directly. Story & Measure is deliberately a studio of one, with a trusted bench of designers and media buyers brought in per project when the work calls for it."
+								},
+								{
+									"question": "How do engagements start?",
+									"answer": "Every engagement starts with a free 30-minute discovery call, followed by a short written assessment of where your marketing stands and what the first 90 days should look like. No commitment until you've seen the plan."
+								},
+								{
+									"question": "What does \"measure\" mean in practice?",
+									"answer": "Before any campaign launches, we agree on what success looks like — leads, bookings, sales, sign-ups — and set up the tracking to capture it. You get a monthly report that says what ran, what it cost, and what it returned."
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "pricing",
+				"slug": "pricing",
+				"status": "published",
+				"data": {
+					"title": "Packages",
+					"content": [
+						{
+							"_type": "marketing.hero",
+							"_key": "pricing-hero",
+							"headline": "Simple packages, honest scope",
+							"subheadline": "Three ways to work together. Every package includes a measurement plan and a monthly plain-English report.",
+							"centered": true
+						},
+						{
+							"_type": "marketing.pricing",
+							"_key": "pricing-plans",
+							"plans": [
+								{
+									"name": "Story Session",
+									"price": "$1,800",
+									"period": "one-time",
+									"description": "A focused reset of your positioning and message",
+									"features": "90-minute working session with Jodi\nBrand story & positioning one-pager\nMessaging house (voice, pillars, proof points)\n30-day content starter calendar\nOne round of revisions",
+									"ctaLabel": "Book a Session",
+									"ctaUrl": "/contact"
+								},
+								{
+									"name": "Studio Retainer",
+									"price": "$3,200",
+									"period": "/month",
+									"description": "Ongoing strategy, content, and reporting",
+									"features": "Quarterly marketing plan\nMonthly editorial calendar & newsletter\nCampaign planning & creative briefs\nAnalytics dashboard & monthly report\nTwo strategy calls per month\nEmail support between calls\n3-month minimum",
+									"ctaLabel": "Start the Conversation",
+									"ctaUrl": "/contact",
+									"highlighted": true
+								},
+								{
+									"name": "Launch Sprint",
+									"price": "Custom",
+									"description": "Six weeks from idea to live campaign",
+									"features": "Everything scoped to one launch\nAudience research & positioning\nChannel plan & creative production\nLaunch-week management\n90-day results report",
+									"ctaLabel": "Scope a Sprint",
+									"ctaUrl": "/contact"
+								}
+							]
+						},
+						{
+							"_type": "marketing.faq",
+							"_key": "pricing-faq",
+							"headline": "Package questions",
+							"items": [
+								{
+									"question": "Can I start small and grow into a retainer?",
+									"answer": "That's the most common path. Most retainer clients started with a Story Session — it doubles as the foundation for everything that follows, and its fee is credited toward your first retainer month."
+								},
+								{
+									"question": "Do packages include ad spend?",
+									"answer": "No — media budgets are billed directly to you by the platforms, so you always own your accounts and your data. Package fees cover strategy, creative direction, and management."
+								},
+								{
+									"question": "What if my project doesn't fit a package?",
+									"answer": "Packages are starting points, not boxes. Book a discovery call and Jodi will scope something that fits — or tell you honestly if you don't need her yet."
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"id": "contact",
+				"slug": "contact",
+				"status": "published",
+				"data": {
+					"title": "Contact",
+					"content": [
+						{
+							"_type": "marketing.hero",
+							"_key": "contact-hero",
+							"headline": "Let's talk about your story",
+							"subheadline": "Tell Jodi a little about your business and what you're hoping marketing will do for it. You'll hear back within one business day.",
+							"centered": true
+						}
+					]
+				}
+			}
+		]
+	}
+}

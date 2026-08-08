@@ -1,0 +1,37 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "storyandmeasure",
+	"main": "./src/worker.ts",
+	"workers_dev": true,
+	"compatibility_date": "2026-02-24",
+	"compatibility_flags": ["nodejs_compat"],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "storyandmeasure-db",
+			"database_id": "e76ef50e-b17a-42d6-a59f-79b7071469c9",
+		},
+	],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "storyandmeasure-media",
+		},
+	],
+	// Worker Loader for plugin sandboxing
+	// "worker_loaders": [
+	// 	{
+	// 		"binding": "LOADER",
+	// 	},
+	// ],
+	// Drives scheduled publishing, plugin cron, and maintenance (see src/worker.ts)
+	"routes": [
+		{
+			"pattern": "storyandmeasure.com",
+			"custom_domain": true,
+		},
+	],
+	"triggers": {
+		"crons": ["* * * * *"],
+	},
+}
