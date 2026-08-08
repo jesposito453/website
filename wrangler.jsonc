@@ -12,6 +12,10 @@
 			"database_id": "e76ef50e-b17a-42d6-a59f-79b7071469c9",
 		},
 	],
+	// Cloudflare Email Sending binding (used by the cloudflareEmail plugin
+	// for magic-link login and invite emails). The sender domain must be
+	// onboarded for Email Sending in the Cloudflare dashboard.
+	"send_email": [{ "name": "EMAIL" }],
 	"r2_buckets": [
 		{
 			"binding": "MEDIA",
