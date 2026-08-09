@@ -1,7 +1,6 @@
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 import { d1, r2 } from "@emdash-cms/cloudflare";
-import { cloudflareEmail } from "@emdash-cms/cloudflare/plugins";
 import icon from "astro-iconset";
 import { defineConfig, fontProviders } from "astro/config";
 import emdash from "emdash/astro";
@@ -54,14 +53,6 @@ export default defineConfig({
 			database: d1({ binding: "DB", session: "auto" }),
 			storage: r2({ binding: "MEDIA" }),
 			plugins: [
-				// Delivers system emails (magic link login, invites) through
-				// Cloudflare Email Sending. Requires the `send_email` binding in
-				// wrangler.jsonc and the sender domain onboarded for Email
-				// Sending; select as provider under admin Settings → Email.
-				cloudflareEmail({
-					from: { email: "cms@storyandmeasure.com", name: "Story & Measure" },
-					replyTo: "hello@storyandmeasure.com",
-				}),
 				{
 					id: "marketing-blocks",
 					version: "0.1.0",
