@@ -14,6 +14,14 @@ export default defineConfig({
 		responsiveStyles: true,
 	},
 	vite: {
+		build: {
+			// Keep light-dark() native in the CSS output. Vite 8's Lightning CSS
+			// defaults target browsers without it and compile it to a polyfill
+			// that only follows the OS preference, which breaks the footer
+			// theme toggle (it flips color-scheme via a class). Browsers older
+			// than these get the light-only fallback in tokens.css.
+			cssTarget: ["chrome123", "firefox120", "safari17.5"],
+		},
 		ssr: {
 			optimizeDeps: {
 				// Pre-bundle so it isn't discovered mid-render, which would trigger
