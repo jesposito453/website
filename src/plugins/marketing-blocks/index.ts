@@ -185,6 +185,39 @@ const definition: PluginDefinition = {
 			},
 
 			{
+				type: "marketing.cards",
+				label: "Content Cards",
+				category: "Sections",
+				description: "Two-column cards with rich HTML content",
+				fields: [
+					{ type: "text_input", action_id: "headline", label: "Headline" },
+					{
+						type: "text_input",
+						action_id: "subheadline",
+						label: "Subheadline",
+						multiline: true,
+					},
+					{
+						type: "repeater",
+						action_id: "cards",
+						label: "Cards",
+						item_label: "Card",
+						min_items: 1,
+						fields: [
+							{ type: "text_input", action_id: "title", label: "Title" },
+							{
+								type: "text_input",
+								action_id: "content",
+								label: "Content (HTML allowed)",
+								multiline: true,
+								placeholder: "<p>Card body — plain text or HTML markup.</p>",
+							},
+						],
+					},
+				],
+			},
+
+			{
 				type: "marketing.faq",
 				label: "FAQ",
 				category: "Sections",

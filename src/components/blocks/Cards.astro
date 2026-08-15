@@ -1,0 +1,102 @@
+---
+interface Props {
+	node: {
+		_key?: string;
+		headline?: string;
+		subheadline?: string;
+		cards: Array<{
+			title?: string;
+			content?: string;
+		}>;
+	};
+}
+
+const { node } = Astro.props;
+const { _key, headline, subheadline, cards } = node;
+---
+
+<section class="cards section" id={_key}>
+	<div class="container">
+		{(headline || subheadline) && (
+			<header class="section-header">
+				{headline && <h2 class="section-headline">{headline}</h2>}
+				{subheadline && <p class="section-subheadline">{subheadline}</p>}
+			</header>
+		)}
+		<div class="cards-grid">
+			{cards.map((card) => (
+				<div class="card">
+					{card.title && <h3 class="card-title">{card.title}</h3>}
+					{card.content && <div class="card-content" set:html={card.content} />}
+				</div>
+			))}
+		</div>
+	</div>
+</section>
+
+<style>
+	.cards-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--spacing-xl);
+	}
+
+	.card {
+		padding: var(--spacing-xl);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		transition:
+			transform var(--transition-base),
+			box-shadow var(--transition-base),
+			border-color var(--transition-base);
+	}
+
+	.card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-lg);
+		border-color: var(--color-brand-soft);
+	}
+
+	.card-title {
+		font-size: var(--font-size-lg);
+		font-weight: var(--font-weight-heading);
+		margin-bottom: var(--spacing-sm);
+	}
+
+	/* Content is editor-authored HTML injected via set:html, so it carries no
+	   Astro scope attribute -- style its children through :global(). */
+	.card-content {
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-normal);
+	}
+
+	.card-content :global(p + p),
+	.card-content :global(ul),
+	.card-content :global(ol) {
+		margin-top: var(--spacing-sm);
+	}
+
+	.card-content :global(ul),
+	.card-content :global(ol) {
+		padding-left: var(--spacing-lg);
+	}
+
+	.card-content :global(a) {
+		color: var(--color-brand);
+		text-decoration: underline;
+	}
+
+	.card-content :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: var(--radius);
+	}
+
+	@media (max-width: 700px) {
+		.cards-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
