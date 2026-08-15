@@ -78,6 +78,7 @@ This template ships a local plugin at `src/plugins/marketing-blocks/` that regis
 | `marketing.pricing`      | `headline`, repeater of `{ name, price, period, description, features (newline-separated string), ctaLabel, ctaUrl, highlighted }` |
 | `marketing.faq`          | `headline`, repeater of `{ question, answer }`                                                                                     |
 | `marketing.cards`        | `headline`, `subheadline`, repeater of `{ title, content }` -- `content` is raw HTML rendered via `set:html`, two-column grid      |
+| `marketing.content`      | `headline`, `content` -- single rich HTML body rendered via `set:html`                                                            |
 
 Constraints worth remembering:
 

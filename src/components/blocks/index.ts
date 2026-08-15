@@ -4,3 +4,4 @@ export { default as Testimonials } from "./Testimonials.astro";
 export { default as Pricing } from "./Pricing.astro";
 export { default as FAQ } from "./FAQ.astro";
 export { default as Cards } from "./Cards.astro";
+export { default as Content } from "./Content.astro";

@@ -218,6 +218,23 @@ const definition: PluginDefinition = {
 			},
 
 			{
+				type: "marketing.content",
+				label: "Content Section",
+				category: "Sections",
+				description: "Heading with a rich HTML content body",
+				fields: [
+					{ type: "text_input", action_id: "headline", label: "Headline" },
+					{
+						type: "text_input",
+						action_id: "content",
+						label: "Content (HTML allowed)",
+						multiline: true,
+						placeholder: "<p>Section body — plain text or HTML markup.</p>",
+					},
+				],
+			},
+
+			{
 				type: "marketing.faq",
 				label: "FAQ",
 				category: "Sections",

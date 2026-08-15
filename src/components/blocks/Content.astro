@@ -1,0 +1,68 @@
+---
+interface Props {
+	node: {
+		_key?: string;
+		headline?: string;
+		content?: string;
+	};
+}
+
+const { node } = Astro.props;
+const { _key, headline, content } = node;
+---
+
+<section class="content-section section" id={_key}>
+	<div class="container">
+		{headline && (
+			<header class="section-header">
+				<h2 class="section-headline">{headline}</h2>
+			</header>
+		)}
+		{content && <div class="content-body" set:html={content} />}
+	</div>
+</section>
+
+<style>
+	/* Body is editor-authored HTML injected via set:html, so it carries no
+	   Astro scope attribute -- style its children through :global(). */
+	.content-body {
+		max-width: var(--max-width);
+		margin: 0 auto;
+		line-height: var(--leading-normal);
+	}
+
+	.content-body :global(p + p),
+	.content-body :global(ul),
+	.content-body :global(ol) {
+		margin-top: var(--spacing-md);
+	}
+
+	.content-body :global(h3),
+	.content-body :global(h4) {
+		margin-top: var(--spacing-xl);
+		margin-bottom: var(--spacing-sm);
+	}
+
+	.content-body :global(ul),
+	.content-body :global(ol) {
+		padding-left: var(--spacing-lg);
+	}
+
+	.content-body :global(a) {
+		color: var(--color-brand);
+		text-decoration: underline;
+	}
+
+	.content-body :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: var(--radius-lg);
+	}
+
+	.content-body :global(blockquote) {
+		margin-top: var(--spacing-md);
+		padding-left: var(--spacing-lg);
+		border-left: 3px solid var(--color-brand);
+		color: var(--color-muted);
+	}
+</style>
