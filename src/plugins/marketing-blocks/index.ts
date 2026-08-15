@@ -66,6 +66,8 @@ const definition: PluginDefinition = {
 						label: "Secondary CTA label",
 					},
 					{ type: "text_input", action_id: "secondaryCtaUrl", label: "Secondary CTA URL" },
+					{ type: "text_input", action_id: "imageUrl", label: "Image URL" },
+					{ type: "text_input", action_id: "imageAlt", label: "Image alt text" },
 					{ type: "toggle", action_id: "centered", label: "Center the layout" },
 				],
 			},

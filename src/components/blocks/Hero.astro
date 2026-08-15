@@ -9,13 +9,18 @@ interface Props {
 		primaryCtaUrl?: string;
 		secondaryCtaLabel?: string;
 		secondaryCtaUrl?: string;
+		// Image is flattened to sibling fields for the same reason.
+		imageUrl?: string;
+		imageAlt?: string;
 		image?: { url: string; alt?: string };
 		centered?: boolean;
 	};
 }
 
 const { node } = Astro.props;
-const { headline, subheadline, image, centered } = node;
+const { headline, subheadline, centered } = node;
+
+const image = node.image ?? (node.imageUrl ? { url: node.imageUrl, alt: node.imageAlt } : undefined);
 
 const primaryCta =
 	node.primaryCtaLabel && node.primaryCtaUrl
