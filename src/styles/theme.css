@@ -48,6 +48,19 @@
 	--radius-lg: 14px;
 }
 
+/* Tighter vertical rhythm between page sections. The base default pads
+   --spacing-5xl (8rem) per side, which doubles up to 16rem between
+   adjacent sections -- far too airy. 4rem per side gives 8rem between. */
+.section {
+	padding: var(--spacing-3xl) 0;
+}
+
+/* Base default puts --spacing-4xl (6rem) between a section's heading and
+   its content; 3rem keeps the heading attached to what it introduces. */
+.section-header {
+	margin-bottom: var(--spacing-2xl);
+}
+
 /* Light-mode fallback for browsers without light-dark() */
 @supports not (color: light-dark(#000, #fff)) {
 	:root {
