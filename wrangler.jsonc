@@ -23,6 +23,10 @@
 			"bucket_name": "storyandmeasure-media",
 		},
 	],
+	// Contact form notifications go out over Gmail SMTP (see
+	// src/pages/contact.astro). Cloudflare Email Sending would need the
+	// Workers Paid plan; Workspace already authenticates this domain.
+	// The app password lives in the GMAIL_APP_PASSWORD secret, never here.
 	// Worker Loader for plugin sandboxing
 	// "worker_loaders": [
 	// 	{

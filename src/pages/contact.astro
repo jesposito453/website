@@ -1,6 +1,10 @@
 ---
 import { Icon } from "astro-iconset/components";
+// Worker env (vars + secrets). The Cloudflare adapter runs dev and production
+// in workerd, so this resolves in both.
+import { env } from "cloudflare:workers";
 import { getEmDashEntry } from "emdash";
+import { WorkerMailer } from "worker-mailer";
 import Base from "../layouts/Base.astro";
 import MarketingBlocks from "../components/MarketingBlocks.astro";
 
@@ -13,43 +17,105 @@ try {
 	Astro.cache.set(cacheHint);
 } catch {}
 
-// Handle form submission
-// NOTE: This is demo code. For production, add:
-// - CSRF token validation
-// - Rate limiting (e.g., via Cloudflare or middleware)
-// - Actual email sending or webhook integration
+/*
+ * Form submissions are emailed through Gmail SMTP submission (STARTTLS on
+ * 587 -- Workers only block outbound port 25), authenticating as the
+ * Workspace mailbox with an app password. Google already publishes SPF and
+ * DKIM for this domain, so nothing extra is needed to pass authentication.
+ *
+ * The message is sent from the mailbox to itself with Reply-To set to the
+ * submitter, so replying from the inbox goes straight back to them. Sending
+ * *as* the visitor's address would fail SPF/DMARC on their domain.
+ */
+const INBOX = "hello@storyandmeasure.com";
+const SMTP_HOST = "smtp.gmail.com";
+const SMTP_PORT = 587;
+
+// Caps stop a bot from posting megabytes of junk into the inbox.
+const LIMITS = { name: 120, email: 200, company: 160, message: 5000 };
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 let formStatus: "idle" | "success" | "error" = "idle";
 let formMessage = "";
+
+const SUCCESS_MESSAGE =
+	"Thanks for reaching out! You'll hear back within one business day.";
 
 if (Astro.request.method === "POST") {
 	try {
 		const formData = await Astro.request.formData();
-		const name = formData.get("name")?.toString() || "";
-		const email = formData.get("email")?.toString() || "";
-		const company = formData.get("company")?.toString() || "";
-		const message = formData.get("message")?.toString() || "";
+		const field = (key: string, max: number) =>
+			(formData.get(key)?.toString() ?? "").trim().slice(0, max);
 
-		if (!name || !email || !message) {
+		const name = field("name", LIMITS.name);
+		const email = field("email", LIMITS.email);
+		const company = field("company", LIMITS.company);
+		const message = field("message", LIMITS.message);
+		// Honeypot: hidden from people, irresistible to bots. A filled value
+		// gets the success screen so the bot has nothing to learn from.
+		const trap = formData.get("website")?.toString() ?? "";
+
+		if (trap) {
+			formStatus = "success";
+			formMessage = SUCCESS_MESSAGE;
+		} else if (!name || !email || !message) {
 			formStatus = "error";
 			formMessage = "Please fill in all required fields.";
-		} else if (!email.includes("@")) {
+		} else if (!EMAIL_PATTERN.test(email)) {
 			formStatus = "error";
 			formMessage = "Please enter a valid email address.";
 		} else {
-			// TODO: Replace with actual email/webhook integration
-			console.log("Contact form submission:", {
-				name,
-				email,
-				company,
+			const lines = [
+				`Name:    ${name}`,
+				`Email:   ${email}`,
+				company ? `Company: ${company}` : null,
+				"",
 				message,
-			});
-			formStatus = "success";
-			formMessage =
-				"Thanks for reaching out! We'll get back to you within 24 hours.";
+			].filter((line) => line !== null);
+
+			const appPassword = env.GMAIL_APP_PASSWORD;
+			const subject = `Contact form: ${name}${company ? ` (${company})` : ""}`;
+
+			if (!appPassword) {
+				// Keep the flow testable locally without putting a live
+				// credential in .dev.vars -- but never claim delivery in
+				// production when the secret is missing.
+				if (import.meta.env.DEV) {
+					console.log(`[contact] (dev, not sent) ${subject}\n${lines.join("\n")}`);
+					formStatus = "success";
+					formMessage = SUCCESS_MESSAGE;
+				} else {
+					throw new Error("GMAIL_APP_PASSWORD is not set");
+				}
+			} else {
+				await WorkerMailer.send(
+					{
+						host: SMTP_HOST,
+						port: SMTP_PORT,
+						startTls: true,
+						credentials: { username: INBOX, password: appPassword },
+						authType: ["plain", "login"],
+					},
+					{
+						// Gmail rewrites the envelope sender to the authenticated
+						// mailbox regardless, so send as the mailbox itself.
+						from: { name: "Story & Measure website", email: INBOX },
+						to: INBOX,
+						reply: { name, email },
+						subject,
+						text: lines.join("\n"),
+					},
+				);
+				formStatus = "success";
+				formMessage = SUCCESS_MESSAGE;
+			}
 		}
-	} catch {
+	} catch (error) {
+		// The submission is lost once this response is sent, so point the
+		// visitor at the inbox rather than leaving them with a dead end.
+		console.error("[contact] submission failed:", error);
 		formStatus = "error";
-		formMessage = "Something went wrong. Please try again.";
+		formMessage = `Sorry -- the message could not be sent. Please email ${INBOX} directly.`;
 	}
 }
 
@@ -75,26 +141,8 @@ const pageContent = page?.data.content;
 								<Icon name="ph:envelope" aria-hidden="true" />
 							</div>
 							<div class="contact-method-content">
-								<h4>General</h4>
+								<h4>Email</h4>
 								<a href="mailto:hello@storyandmeasure.com">hello@storyandmeasure.com</a>
-							</div>
-						</div>
-						<div class="contact-method">
-							<div class="icon-tile contact-icon">
-								<Icon name="ph:sparkle" aria-hidden="true" />
-							</div>
-							<div class="contact-method-content">
-								<h4>New projects</h4>
-								<a href="mailto:jodi@storyandmeasure.com">jodi@storyandmeasure.com</a>
-							</div>
-						</div>
-						<div class="contact-method">
-							<div class="icon-tile contact-icon">
-								<Icon name="ph:users-three" aria-hidden="true" />
-							</div>
-							<div class="contact-method-content">
-								<h4>Speaking & workshops</h4>
-								<a href="mailto:speaking@storyandmeasure.com">speaking@storyandmeasure.com</a>
 							</div>
 						</div>
 					</div>
@@ -163,6 +211,19 @@ const pageContent = page?.data.content;
 										required
 										rows="5"
 										placeholder="Tell us about your project or question..."
+									/>
+								</div>
+
+								{/* Honeypot -- hidden from people and assistive tech, but
+								    present in the DOM for form-filling bots. */}
+								<div class="form-trap" aria-hidden="true">
+									<label for="website">Website</label>
+									<input
+										type="text"
+										id="website"
+										name="website"
+										tabindex="-1"
+										autocomplete="off"
 									/>
 								</div>
 
@@ -242,6 +303,16 @@ const pageContent = page?.data.content;
 		display: flex;
 		flex-direction: column;
 		gap: var(--spacing-lg);
+	}
+
+	/* Honeypot. `display: none` is the one thing bots do check for, so take it
+	   out of flow instead -- invisible to people, still submitted. */
+	.form-trap {
+		position: absolute;
+		left: -9999px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
 	}
 
 	.form-row {
