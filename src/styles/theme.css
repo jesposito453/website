@@ -61,6 +61,19 @@
 	margin-bottom: var(--spacing-2xl);
 }
 
+/* Text alignment chosen in the rich-text editor. EmDash's Portable Text
+   renderer emits these WordPress-style classes on aligned blocks but ships
+   no CSS for them -- the site must define them. */
+.has-text-align-center {
+	text-align: center;
+}
+.has-text-align-right {
+	text-align: right;
+}
+.has-text-align-justify {
+	text-align: justify;
+}
+
 /* Light-mode fallback for browsers without light-dark() */
 @supports not (color: light-dark(#000, #fff)) {
 	:root {

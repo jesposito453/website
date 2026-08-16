@@ -36,4 +36,73 @@ const marketingTypes = {
 };
 ---
 
-<PortableText value={value} components={{ type: marketingTypes }} />
+<div class="marketing-doc">
+	<PortableText value={value} components={{ type: marketingTypes }} />
+</div>
+
+<style>
+	/* Content typed directly in the page editor (regular headings, paragraphs,
+	   lists) renders as bare top-level elements, unlike the marketing blocks,
+	   which wrap themselves in a padded .section > .container. Give that loose
+	   content the same container width and a matching vertical rhythm so mixed
+	   pages read as one design. Marketing blocks render <section> roots and are
+	   excluded. */
+	/* An editorial column: noticeably narrower than the 1200px block
+	   container, but roomier than the 720px prose token. */
+	.marketing-doc > :global(:not(section)) {
+		max-width: 56rem;
+		margin-inline: auto;
+		padding-inline: var(--spacing-lg);
+	}
+
+	.marketing-doc > :global(p),
+	.marketing-doc > :global(ul),
+	.marketing-doc > :global(ol),
+	.marketing-doc > :global(blockquote) {
+		margin-top: var(--spacing-md);
+		line-height: var(--leading-normal);
+	}
+
+	.marketing-doc > :global(h1),
+	.marketing-doc > :global(h2) {
+		margin-top: var(--spacing-3xl);
+		margin-bottom: var(--spacing-md);
+	}
+
+	.marketing-doc > :global(h3),
+	.marketing-doc > :global(h4) {
+		margin-top: var(--spacing-xl);
+		margin-bottom: var(--spacing-sm);
+	}
+
+	.marketing-doc > :global(ul),
+	.marketing-doc > :global(ol) {
+		padding-left: calc(var(--spacing-lg) + var(--spacing-lg));
+	}
+
+	.marketing-doc > :global(blockquote) {
+		padding-left: calc(var(--spacing-lg) + var(--spacing-lg));
+		border-left: 3px solid var(--color-brand);
+		color: var(--color-muted);
+	}
+
+	.marketing-doc > :global(figure),
+	.marketing-doc > :global(img) {
+		margin-top: var(--spacing-xl);
+	}
+
+	.marketing-doc :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: var(--radius-lg);
+	}
+
+	/* Breathing room when a page starts or ends with loose content. */
+	.marketing-doc > :global(:not(section):first-child) {
+		margin-top: var(--spacing-3xl);
+	}
+
+	.marketing-doc > :global(:not(section):last-child) {
+		margin-bottom: var(--spacing-3xl);
+	}
+</style>

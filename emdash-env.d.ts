@@ -5,6 +5,19 @@
 
 import type { ContentBylineCredit, TaxonomyTerm, PortableTextBlock } from "emdash";
 
+export interface Card {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  body?: PortableTextBlock[];
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
 export interface Page {
   id: string;
   slug: string | null;
@@ -20,6 +33,7 @@ export interface Page {
 
 declare module "emdash" {
   interface EmDashCollections {
+    cards: Card;
     pages: Page;
   }
 }
