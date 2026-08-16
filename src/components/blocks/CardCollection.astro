@@ -1,0 +1,171 @@
+---
+/**
+ * Renders entries from the `cards` collection in a configurable grid.
+ *
+ * Unlike the other marketing blocks, card content lives in the CMS as its own
+ * collection so each card body is authored in the full rich-text editor
+ * (Block Kit modals have no rich-text element). The block itself only holds
+ * presentation config: headline, column count, and which cards to show.
+ */
+import { getEmDashCollection, getEmDashEntry } from "emdash";
+import { PortableText } from "emdash/ui";
+
+interface Props {
+	node: {
+		_key?: string;
+		headline?: string;
+		subheadline?: string;
+		columns?: string;
+		cards?: string;
+	};
+}
+
+const { node } = Astro.props;
+const { _key, headline, subheadline } = node;
+
+const columns = Math.min(4, Math.max(1, Number.parseInt(node.columns ?? "2", 10) || 2));
+
+const slugs = (node.cards ?? "")
+	.split("\n")
+	.map((s) => s.trim())
+	.filter(Boolean);
+
+type Card = { title?: string; body?: unknown };
+let cards: Array<{ id: string; data: Card }> = [];
+
+if (slugs.length > 0) {
+	const results = await Promise.all(slugs.map((slug) => getEmDashEntry("cards", slug)));
+	for (const result of results) {
+		if (result.entry) cards.push(result.entry as (typeof cards)[number]);
+		if (Astro.cache?.enabled && result.cacheHint) Astro.cache.set(result.cacheHint);
+	}
+} else {
+	const { entries, cacheHint } = await getEmDashCollection("cards", {
+		status: "published",
+		orderBy: { created_at: "asc" },
+	});
+	cards = entries as typeof cards;
+	if (Astro.cache?.enabled && cacheHint) Astro.cache.set(cacheHint);
+}
+---
+
+<section class="card-collection section" id={_key}>
+	<div class="container">
+		{(headline || subheadline) && (
+			<header class="section-header">
+				{headline && <h2 class="section-headline">{headline}</h2>}
+				{subheadline && <p class="section-subheadline">{subheadline}</p>}
+			</header>
+		)}
+		<div class:list={["collection-grid", `cols-${columns}`]}>
+			{cards.map((card) => (
+				<div class="card">
+					{card.data.title && <h3 class="card-title">{card.data.title}</h3>}
+					{card.data.body && (
+						<div class="card-body">
+							<PortableText value={card.data.body as any} />
+						</div>
+					)}
+				</div>
+			))}
+		</div>
+	</div>
+</section>
+
+<style>
+	.collection-grid {
+		display: grid;
+		gap: var(--spacing-xl);
+	}
+
+	.cols-1 {
+		grid-template-columns: 1fr;
+		max-width: var(--max-width);
+		margin: 0 auto;
+	}
+	.cols-2 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.cols-3 {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	.cols-4 {
+		grid-template-columns: repeat(4, 1fr);
+	}
+
+	.card {
+		padding: var(--spacing-xl);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		transition:
+			transform var(--transition-base),
+			box-shadow var(--transition-base),
+			border-color var(--transition-base);
+	}
+
+	.card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-lg);
+		border-color: var(--color-brand-soft);
+	}
+
+	.card-title {
+		font-size: var(--font-size-lg);
+		font-weight: var(--font-weight-heading);
+		margin-bottom: var(--spacing-sm);
+	}
+
+	/* PortableText output is unscoped children of .card-body */
+	.card-body {
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-normal);
+	}
+
+	.card-body :global(p + p),
+	.card-body :global(ul),
+	.card-body :global(ol) {
+		margin-top: var(--spacing-sm);
+	}
+
+	.card-body :global(ul),
+	.card-body :global(ol) {
+		padding-left: var(--spacing-lg);
+	}
+
+	.card-body :global(a) {
+		color: var(--color-brand);
+		text-decoration: underline;
+	}
+
+	.card-body :global(img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: var(--radius);
+	}
+
+	.card-body :global(h2),
+	.card-body :global(h3),
+	.card-body :global(h4) {
+		font-size: var(--font-size-base);
+		margin-top: var(--spacing-md);
+		margin-bottom: var(--spacing-xs);
+		color: var(--color-text);
+	}
+
+	@media (max-width: 1024px) {
+		.cols-3,
+		.cols-4 {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 640px) {
+		.cols-2,
+		.cols-3,
+		.cols-4 {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -29,6 +29,25 @@
 					"type": "portableText"
 				}
 			]
+		},
+		{
+			"slug": "cards",
+			"label": "Cards",
+			"labelSingular": "Card",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "body",
+					"label": "Body",
+					"type": "portableText"
+				}
+			]
 		}
 	],
 	"menus": [

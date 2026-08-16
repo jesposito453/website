@@ -218,6 +218,40 @@ const definition: PluginDefinition = {
 			},
 
 			{
+				type: "marketing.cardCollection",
+				label: "Card Collection",
+				category: "Sections",
+				description: "Cards from the Cards collection in a configurable grid",
+				fields: [
+					{ type: "text_input", action_id: "headline", label: "Headline" },
+					{
+						type: "text_input",
+						action_id: "subheadline",
+						label: "Subheadline",
+						multiline: true,
+					},
+					{
+						type: "select",
+						action_id: "columns",
+						label: "Columns",
+						options: [
+							{ label: "1 column", value: "1" },
+							{ label: "2 columns", value: "2" },
+							{ label: "3 columns", value: "3" },
+							{ label: "4 columns", value: "4" },
+						],
+					},
+					{
+						type: "text_input",
+						action_id: "cards",
+						label: "Card slugs (one per line — leave empty to show all cards)",
+						multiline: true,
+						placeholder: "our-mission\nour-approach",
+					},
+				],
+			},
+
+			{
 				type: "marketing.content",
 				label: "Content Section",
 				category: "Sections",

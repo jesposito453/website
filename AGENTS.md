@@ -61,6 +61,7 @@ There is no posts collection. Content is entirely authored as marketing blocks i
 ## Schema
 
 - `pages` collection: `title`, `content` (Portable Text containing marketing blocks).
+- `cards` collection: `title` (string), `body` (Portable Text). Card content is authored here in the full rich-text editor; the `marketing.cardCollection` block pulls entries onto pages. NOTE: the seed only applies to fresh databases -- existing local/production databases need the collection created via `npx emdash schema` or the admin's Content Types UI.
 - No taxonomies.
 - Four menus: `primary`, `footer_product`, `footer_company`, `footer_support`.
 
@@ -79,6 +80,7 @@ This template ships a local plugin at `src/plugins/marketing-blocks/` that regis
 | `marketing.faq`          | `headline`, repeater of `{ question, answer }`                                                                                     |
 | `marketing.cards`        | `headline`, `subheadline`, repeater of `{ title, content }` -- `content` is raw HTML rendered via `set:html`, two-column grid      |
 | `marketing.content`      | `headline`, `content` -- single rich HTML body rendered via `set:html`                                                            |
+| `marketing.cardCollection` | `headline`, `subheadline`, `columns` (select 1-4), `cards` (newline-separated card slugs; empty = all) -- renders entries from the `cards` collection |
 
 Constraints worth remembering:
 
