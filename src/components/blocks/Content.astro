@@ -1,17 +1,19 @@
 ---
+import { sectionAnchor } from "./anchor";
 interface Props {
 	node: {
 		_key?: string;
+		anchor?: string;
 		headline?: string;
 		content?: string;
 	};
 }
 
 const { node } = Astro.props;
-const { _key, headline, content } = node;
+const { _key, anchor, headline, content } = node;
 ---
 
-<section class="content-section section" id={_key}>
+<section class="content-section section" id={sectionAnchor(node)}>
 	<div class="container">
 		{headline && (
 			<header class="section-header">

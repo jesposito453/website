@@ -1,9 +1,11 @@
 ---
+import { sectionAnchor } from "./anchor";
 import { Icon } from "astro-iconset/components";
 
 interface Props {
 	node: {
 		_key?: string;
+		anchor?: string;
 		headline?: string;
 		subheadline?: string;
 		features: Array<{
@@ -15,7 +17,7 @@ interface Props {
 }
 
 const { node } = Astro.props;
-const { _key, headline, subheadline, features } = node;
+const { _key, anchor, headline, subheadline, features } = node;
 
 const iconMap: Record<string, string> = {
 	zap: "ph:lightning",
@@ -33,7 +35,7 @@ const iconMap: Record<string, string> = {
 };
 ---
 
-<section class="features section" id={_key}>
+<section class="features section" id={sectionAnchor(node, "features")}>
 	<div class="container">
 		{(headline || subheadline) && (
 			<header class="section-header">

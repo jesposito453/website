@@ -26,6 +26,45 @@
       ]
     },
     {
+      "slug": "case_studies",
+      "label": "Case Studies",
+      "labelSingular": "Case Studies",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "unique": false
+        },
+        {
+          "slug": "summary",
+          "label": "Summary",
+          "type": "text",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "image",
+          "required": false,
+          "unique": false
+        },
+        {
+          "slug": "body",
+          "label": "Body",
+          "type": "portableText",
+          "required": false,
+          "unique": false
+        }
+      ]
+    },
+    {
       "slug": "pages",
       "label": "Pages",
       "labelSingular": "Page",
@@ -52,5 +91,5 @@
       ]
     }
   ],
-  "version": "1d043ec73cbe31b9"
+  "version": "f99f452fa072bd0a"
 }

@@ -1,6 +1,7 @@
 ---
 interface Props {
 	node: {
+		anchor?: string;
 		headline: string;
 		subheadline?: string;
 		// CTAs are flattened to sibling fields because Block Kit has no
@@ -32,7 +33,10 @@ const secondaryCta =
 		: undefined;
 ---
 
-<section class:list={["hero", { "hero-centered": centered, "hero-with-image": !!image }]}>
+<section
+	class:list={["hero", { "hero-centered": centered, "hero-with-image": !!image }]}
+	id={node.anchor}
+>
 	<div class="hero-content">
 		<h1 class="hero-headline">{headline}</h1>
 		{subheadline && <p class="hero-subheadline">{subheadline}</p>}

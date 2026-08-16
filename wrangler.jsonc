@@ -5,6 +5,11 @@
 	"workers_dev": true,
 	"compatibility_date": "2026-02-24",
 	"compatibility_flags": ["nodejs_compat"],
+	// Pages render at /<slug> (src/pages/[slug].astro), not the EmDash default
+	// of /<collection>/<slug> -- this makes the admin's preview links match.
+	"vars": {
+		"EMDASH_PREVIEW_PATH_PATTERN": "/{id}",
+	},
 	"d1_databases": [
 		{
 			"binding": "DB",

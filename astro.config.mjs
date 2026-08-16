@@ -61,6 +61,9 @@ export default defineConfig({
 		emdash({
 			database: d1({ binding: "DB", session: "auto" }),
 			storage: r2({ binding: "MEDIA" }),
+			// No floating "EmDash | Edit" pill on public pages for logged-in
+			// editors. Editing still works normally through /_emdash/admin.
+			toolbar: false,
 			// "Sign in with Google" on the admin login page. Reads
 			// EMDASH_OAUTH_GOOGLE_CLIENT_ID / EMDASH_OAUTH_GOOGLE_CLIENT_SECRET
 			// (worker secrets in production, .env locally).

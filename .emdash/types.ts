@@ -16,6 +16,21 @@ export interface Card {
   terms?: Record<string, TaxonomyTerm[]>;
 }
 
+export interface CaseStudy {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  summary?: string;
+  featured_image?: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  body?: PortableTextBlock[];
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
 export interface Page {
   id: string;
   slug: string | null;

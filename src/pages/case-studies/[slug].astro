@@ -1,0 +1,62 @@
+---
+/**
+ * Case study detail page: /case-studies/<slug>. The listing lives on the
+ * CMS-authored /case-studies page via the marketing.caseStudies block.
+ */
+import { getEmDashEntry } from "emdash";
+import Base from "../../layouts/Base.astro";
+import MarketingBlocks from "../../components/MarketingBlocks.astro";
+
+const { slug } = Astro.params;
+
+const { entry: study, cacheHint } = await getEmDashEntry("case_studies", slug!);
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+if (!study) {
+	Astro.response.status = 404;
+	return Astro.rewrite("/404");
+}
+---
+
+<Base title={study.data.title} description={study.data.summary}>
+	<article>
+		<header class="study-header" {...study.edit}>
+			<h1 class="study-headline" {...study.edit.title}>{study.data.title}</h1>
+			{study.data.summary && <p class="study-summary" {...study.edit.summary}>{study.data.summary}</p>}
+		</header>
+		<div {...study.edit.body}>
+			<MarketingBlocks value={study.data.body ?? []} />
+		</div>
+		<footer class="study-footer">
+			<a href="/case-studies" class="btn btn-secondary">← All case studies</a>
+		</footer>
+	</article>
+</Base>
+
+<style>
+	.study-header {
+		max-width: 56rem;
+		margin: 0 auto;
+		padding: var(--spacing-3xl) var(--spacing-lg) var(--spacing-lg);
+		text-align: center;
+	}
+
+	.study-headline {
+		font-size: var(--font-size-4xl);
+		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
+	}
+
+	.study-summary {
+		margin-top: var(--spacing-md);
+		font-size: var(--font-size-lg);
+		color: var(--color-muted);
+	}
+
+	.study-footer {
+		max-width: 56rem;
+		margin: 0 auto;
+		padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-3xl);
+	}
+</style>

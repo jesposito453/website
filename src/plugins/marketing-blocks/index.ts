@@ -54,6 +54,11 @@ const definition: PluginDefinition = {
 					{ type: "text_input", action_id: "headline", label: "Headline" },
 					{
 						type: "text_input",
+						action_id: "anchor",
+						label: "Anchor ID (for #links, e.g. \"features\")",
+					},
+					{
+						type: "text_input",
 						action_id: "subheadline",
 						label: "Subheadline",
 						multiline: true,
@@ -79,6 +84,11 @@ const definition: PluginDefinition = {
 				description: "Grid of feature cards with icons",
 				fields: [
 					{ type: "text_input", action_id: "headline", label: "Headline" },
+					{
+						type: "text_input",
+						action_id: "anchor",
+						label: "Anchor ID (for #links, e.g. \"features\")",
+					},
 					{
 						type: "text_input",
 						action_id: "subheadline",
@@ -119,6 +129,11 @@ const definition: PluginDefinition = {
 				fields: [
 					{ type: "text_input", action_id: "headline", label: "Headline" },
 					{
+						type: "text_input",
+						action_id: "anchor",
+						label: "Anchor ID (for #links, e.g. \"features\")",
+					},
+					{
 						type: "repeater",
 						action_id: "testimonials",
 						label: "Testimonials",
@@ -142,6 +157,11 @@ const definition: PluginDefinition = {
 				description: "Pricing plan comparison cards",
 				fields: [
 					{ type: "text_input", action_id: "headline", label: "Headline" },
+					{
+						type: "text_input",
+						action_id: "anchor",
+						label: "Anchor ID (for #links, e.g. \"features\")",
+					},
 					{
 						type: "repeater",
 						action_id: "plans",
@@ -193,6 +213,11 @@ const definition: PluginDefinition = {
 					{ type: "text_input", action_id: "headline", label: "Headline" },
 					{
 						type: "text_input",
+						action_id: "anchor",
+						label: "Anchor ID (for #links, e.g. \"features\")",
+					},
+					{
+						type: "text_input",
 						action_id: "subheadline",
 						label: "Subheadline",
 						multiline: true,
@@ -226,6 +251,11 @@ const definition: PluginDefinition = {
 					{ type: "text_input", action_id: "headline", label: "Headline" },
 					{
 						type: "text_input",
+						action_id: "anchor",
+						label: "Anchor ID (for #links, e.g. \"features\")",
+					},
+					{
+						type: "text_input",
 						action_id: "subheadline",
 						label: "Subheadline",
 						multiline: true,
@@ -252,12 +282,53 @@ const definition: PluginDefinition = {
 			},
 
 			{
+				type: "marketing.caseStudies",
+				label: "Case Studies",
+				category: "Sections",
+				description: "Case study cards linking to their detail pages",
+				fields: [
+					{ type: "text_input", action_id: "headline", label: "Headline" },
+					{
+						type: "text_input",
+						action_id: "anchor",
+						label: "Anchor ID (for #links, e.g. \"features\")",
+					},
+					{
+						type: "text_input",
+						action_id: "subheadline",
+						label: "Subheadline",
+						multiline: true,
+					},
+					{
+						type: "select",
+						action_id: "columns",
+						label: "Columns",
+						options: [
+							{ label: "2 columns", value: "2" },
+							{ label: "3 columns", value: "3" },
+						],
+					},
+					{
+						type: "text_input",
+						action_id: "items",
+						label: "Case study slugs (one per line — leave empty to show all)",
+						multiline: true,
+					},
+				],
+			},
+
+			{
 				type: "marketing.content",
 				label: "Content Section",
 				category: "Sections",
 				description: "Heading with a rich HTML content body",
 				fields: [
 					{ type: "text_input", action_id: "headline", label: "Headline" },
+					{
+						type: "text_input",
+						action_id: "anchor",
+						label: "Anchor ID (for #links, e.g. \"features\")",
+					},
 					{
 						type: "text_input",
 						action_id: "content",
@@ -275,6 +346,11 @@ const definition: PluginDefinition = {
 				description: "Frequently asked questions",
 				fields: [
 					{ type: "text_input", action_id: "headline", label: "Headline" },
+					{
+						type: "text_input",
+						action_id: "anchor",
+						label: "Anchor ID (for #links, e.g. \"features\")",
+					},
 					{
 						type: "repeater",
 						action_id: "items",

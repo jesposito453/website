@@ -1,4 +1,5 @@
 ---
+import { sectionAnchor } from "./anchor";
 interface RawPlan {
 	name: string;
 	price: string;
@@ -16,13 +17,14 @@ interface RawPlan {
 
 interface Props {
 	node: {
+		anchor?: string;
 		headline?: string;
 		plans: RawPlan[];
 	};
 }
 
 const { node } = Astro.props;
-const { headline, plans: rawPlans } = node;
+const { anchor, headline, plans: rawPlans } = node;
 
 const plans = rawPlans.map((plan) => ({
 	...plan,
@@ -37,7 +39,7 @@ const plans = rawPlans.map((plan) => ({
 }));
 ---
 
-<section class="pricing section">
+<section class="pricing section" id={sectionAnchor(node, "pricing")}>
 	<div class="container">
 		{headline && (
 			<header class="section-header pricing-header">

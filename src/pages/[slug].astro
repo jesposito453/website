@@ -1,0 +1,31 @@
+---
+/**
+ * Dynamic route for CMS pages. Any entry in the `pages` collection renders
+ * at /<slug> (e.g. /case-studies). Static routes (index, pricing, contact)
+ * take priority over this route, and `home` renders at / via index.astro.
+ */
+import { getEmDashEntry } from "emdash";
+import Base from "../layouts/Base.astro";
+import MarketingBlocks from "../components/MarketingBlocks.astro";
+
+const { slug } = Astro.params;
+
+// The home page renders at / -- send /home there, keeping any query string
+// so admin preview links (?_preview=...) survive the redirect.
+if (slug === "home") {
+	return Astro.redirect(`/${Astro.url.search}`);
+}
+
+const { entry: page, cacheHint } = await getEmDashEntry("pages", slug!);
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+if (!page) {
+	Astro.response.status = 404;
+	return Astro.rewrite("/404");
+}
+---
+
+<Base title={page.data.title}>
+	<MarketingBlocks value={page.data.content ?? []} />
+</Base>

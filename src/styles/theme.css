@@ -61,6 +61,13 @@
 	margin-bottom: var(--spacing-2xl);
 }
 
+/* The header is sticky, so anchored sections (#features etc.) need a scroll
+   offset or their headline lands underneath it. */
+.section,
+[id] {
+	scroll-margin-top: 5.5rem;
+}
+
 /* Text alignment chosen in the rich-text editor. EmDash's Portable Text
    renderer emits these WordPress-style classes on aligned blocks but ships
    no CSS for them -- the site must define them. */

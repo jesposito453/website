@@ -1,0 +1,161 @@
+---
+import { sectionAnchor } from "./anchor";
+/**
+ * Renders entries from the `case_studies` collection as cards that link to
+ * their detail pages at /case-studies/<slug>. Like CardCollection, the block
+ * holds only presentation config -- the content lives in the collection.
+ */
+import { getEmDashCollection, getEmDashEntry } from "emdash";
+import { Image } from "emdash/ui";
+
+interface Props {
+	node: {
+		_key?: string;
+		anchor?: string;
+		headline?: string;
+		subheadline?: string;
+		columns?: string;
+		items?: string;
+	};
+}
+
+const { node } = Astro.props;
+const { _key, anchor, headline, subheadline } = node;
+
+const columns = node.columns === "3" ? 3 : 2;
+
+const slugs = (node.items ?? "")
+	.split("\n")
+	.map((s) => s.trim())
+	.filter(Boolean);
+
+type CaseStudyData = {
+	title?: string;
+	summary?: string;
+	featured_image?: { id: string; src?: string; alt?: string };
+};
+let studies: Array<{ id: string; data: CaseStudyData }> = [];
+
+if (slugs.length > 0) {
+	const results = await Promise.all(slugs.map((slug) => getEmDashEntry("case_studies", slug)));
+	for (const result of results) {
+		if (result.entry) studies.push(result.entry as (typeof studies)[number]);
+		if (Astro.cache?.enabled && result.cacheHint) Astro.cache.set(result.cacheHint);
+	}
+} else {
+	const { entries, cacheHint } = await getEmDashCollection("case_studies", {
+		status: "published",
+		orderBy: { created_at: "desc" },
+	});
+	studies = entries as typeof studies;
+	if (Astro.cache?.enabled && cacheHint) Astro.cache.set(cacheHint);
+}
+---
+
+<section class="case-studies section" id={sectionAnchor(node)}>
+	<div class="container">
+		{(headline || subheadline) && (
+			<header class="section-header">
+				{headline && <h2 class="section-headline">{headline}</h2>}
+				{subheadline && <p class="section-subheadline">{subheadline}</p>}
+			</header>
+		)}
+		<div class:list={["studies-grid", `cols-${columns}`]}>
+			{studies.map((study) => (
+				<a class="study-card" href={`/case-studies/${study.id}`}>
+					{study.data.featured_image && (
+						<div class="study-image">
+							<Image image={study.data.featured_image} alt={study.data.featured_image.alt ?? study.data.title ?? ""} />
+						</div>
+					)}
+					<div class="study-body">
+						<h3 class="study-title">{study.data.title}</h3>
+						{study.data.summary && <p class="study-summary">{study.data.summary}</p>}
+						<span class="study-more">Read the case study →</span>
+					</div>
+				</a>
+			))}
+		</div>
+	</div>
+</section>
+
+<style>
+	.studies-grid {
+		display: grid;
+		gap: var(--spacing-xl);
+	}
+
+	.cols-2 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.cols-3 {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.study-card {
+		display: flex;
+		flex-direction: column;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		text-decoration: none;
+		color: inherit;
+		transition:
+			transform var(--transition-base),
+			box-shadow var(--transition-base),
+			border-color var(--transition-base);
+	}
+
+	.study-card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-lg);
+		border-color: var(--color-brand-soft);
+	}
+
+	.study-image :global(img) {
+		display: block;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+	}
+
+	.study-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-sm);
+		padding: var(--spacing-xl);
+	}
+
+	.study-title {
+		font-size: var(--font-size-lg);
+		font-weight: var(--font-weight-heading);
+	}
+
+	.study-summary {
+		font-size: var(--font-size-sm);
+		color: var(--color-muted);
+		line-height: var(--leading-normal);
+	}
+
+	.study-more {
+		margin-top: auto;
+		padding-top: var(--spacing-sm);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-brand);
+	}
+
+	@media (max-width: 1024px) {
+		.cols-3 {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 640px) {
+		.cols-2,
+		.cols-3 {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

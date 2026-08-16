@@ -1,4 +1,5 @@
 ---
+import { sectionAnchor } from "./anchor";
 /**
  * Renders entries from the `cards` collection in a configurable grid.
  *
@@ -13,6 +14,7 @@ import { PortableText } from "emdash/ui";
 interface Props {
 	node: {
 		_key?: string;
+		anchor?: string;
 		headline?: string;
 		subheadline?: string;
 		columns?: string;
@@ -21,7 +23,7 @@ interface Props {
 }
 
 const { node } = Astro.props;
-const { _key, headline, subheadline } = node;
+const { _key, anchor, headline, subheadline } = node;
 
 const columns = Math.min(4, Math.max(1, Number.parseInt(node.columns ?? "2", 10) || 2));
 
@@ -49,7 +51,7 @@ if (slugs.length > 0) {
 }
 ---
 
-<section class="card-collection section" id={_key}>
+<section class="card-collection section" id={sectionAnchor(node)}>
 	<div class="container">
 		{(headline || subheadline) && (
 			<header class="section-header">
