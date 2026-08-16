@@ -62,9 +62,11 @@ const { anchor, headline, testimonials } = node;
 		background: var(--color-surface);
 	}
 
+	/* Two up: quotes here run long enough that three columns squeezed them
+	   into narrow ragged blocks, and a two-testimonial section left a gap. */
 	.testimonials-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(2, 1fr);
 		gap: var(--spacing-xl);
 	}
 
@@ -113,13 +115,7 @@ const { anchor, headline, testimonials } = node;
 		color: var(--color-muted);
 	}
 
-	@media (max-width: 900px) {
-		.testimonials-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-
-	@media (max-width: 600px) {
+	@media (max-width: 700px) {
 		.testimonials-grid {
 			grid-template-columns: 1fr;
 		}

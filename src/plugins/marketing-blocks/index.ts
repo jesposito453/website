@@ -237,6 +237,18 @@ const definition: PluginDefinition = {
 								multiline: true,
 								placeholder: "<p>Card body — plain text or HTML markup.</p>",
 							},
+							{
+								type: "text_input",
+								action_id: "url",
+								label: "Link URL (makes the whole card clickable)",
+								placeholder: "/services or https://example.com",
+							},
+							{
+								type: "text_input",
+								action_id: "linkLabel",
+								label: "Link label (shown when a link is set)",
+								placeholder: "Learn more",
+							},
 						],
 					},
 				],

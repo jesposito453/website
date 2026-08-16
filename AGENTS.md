@@ -79,7 +79,7 @@ This template ships a local plugin at `src/plugins/marketing-blocks/` that regis
 | `marketing.testimonials` | `headline`, repeater of `{ quote, author, role, company, avatar (URL) }`                                                           |
 | `marketing.pricing`      | `headline`, repeater of `{ name, price, period, description, features (newline-separated string), ctaLabel, ctaUrl, highlighted }` |
 | `marketing.faq`          | `headline`, repeater of `{ question, answer }`                                                                                     |
-| `marketing.cards`        | `headline`, `subheadline`, repeater of `{ title, content }` -- `content` is raw HTML rendered via `set:html`, two-column grid      |
+| `marketing.cards`        | `headline`, `subheadline`, repeater of `{ title, content, url, linkLabel }` -- `content` is raw HTML rendered via `set:html`, two-column grid; a `url` makes the whole card clickable |
 | `marketing.content`      | `headline`, `content` -- single rich HTML body rendered via `set:html`                                                            |
 | `marketing.cardCollection` | `headline`, `subheadline`, `columns` (select 1-4), `cards` (newline-separated card slugs; empty = all) -- renders entries from the `cards` collection |
 | `marketing.caseStudies`  | `headline`, `subheadline`, `columns` (2-3), `items` (newline-separated slugs; empty = all) -- cards from `case_studies` linking to `/case-studies/<slug>` detail pages |

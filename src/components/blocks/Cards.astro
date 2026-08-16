@@ -9,12 +9,33 @@ interface Props {
 		cards: Array<{
 			title?: string;
 			content?: string;
+			url?: string;
+			linkLabel?: string;
 		}>;
 	};
 }
 
 const { node } = Astro.props;
 const { _key, anchor, headline, subheadline, cards } = node;
+
+/**
+ * A card with a URL becomes clickable via the stretched-link pattern: one real
+ * anchor (the title, or the link label when there is no title) grows a
+ * pseudo-element over the whole card. Wrapping the card in an <a> instead would
+ * nest anchors inside the editor-authored `content` HTML, which is invalid and
+ * makes those inner links unusable.
+ */
+const items = cards.map((card) => {
+	const url = card.url?.trim();
+	const linkLabel = card.linkLabel?.trim();
+	return {
+		...card,
+		url,
+		// Without a title there is no anchor to stretch, so the label row
+		// becomes the link and needs a fallback string.
+		linkLabel: url && !card.title ? linkLabel || "Learn more" : linkLabel,
+	};
+});
 ---
 
 <section class="cards section" id={sectionAnchor(node)}>
@@ -26,10 +47,24 @@ const { _key, anchor, headline, subheadline, cards } = node;
 			</header>
 		)}
 		<div class="cards-grid">
-			{cards.map((card) => (
-				<div class="card">
-					{card.title && <h3 class="card-title">{card.title}</h3>}
+			{items.map((card) => (
+				<div class:list={["card", { "card-linked": !!card.url }]}>
+					{card.title && (
+						<h3 class="card-title">
+							{card.url
+								? <a class="card-link" href={card.url}>{card.title}</a>
+								: card.title}
+						</h3>
+					)}
 					{card.content && <div class="card-content" set:html={card.content} />}
+					{/* When the title is already the stretched link this row is pure
+					    decoration -- a second anchor would duplicate the tab stop and
+					    read the same destination twice to a screen reader. */}
+					{card.url && card.linkLabel && (
+						card.title
+							? <span class="card-more">{card.linkLabel} →</span>
+							: <a class="card-link card-more" href={card.url}>{card.linkLabel} →</a>
+					)}
 				</div>
 			))}
 		</div>
@@ -44,6 +79,8 @@ const { _key, anchor, headline, subheadline, cards } = node;
 	}
 
 	.card {
+		display: flex;
+		flex-direction: column;
 		padding: var(--spacing-xl);
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
@@ -60,10 +97,49 @@ const { _key, anchor, headline, subheadline, cards } = node;
 		border-color: var(--color-brand-soft);
 	}
 
+	/* Stretched link: the anchor's ::after covers the card, so a click
+	   anywhere on the card follows it. Needs the card as containing block. */
+	.card-linked {
+		position: relative;
+	}
+
+	.card-link::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+	}
+
+	/* The overlay swallows the anchor's own outline, so draw focus on the
+	   card instead -- otherwise keyboard focus is invisible. */
+	.card-linked:has(.card-link:focus-visible) {
+		outline: 2px solid var(--color-brand);
+		outline-offset: 2px;
+	}
+
+	.card-link:focus-visible {
+		outline: none;
+	}
+
 	.card-title {
 		font-size: var(--font-size-lg);
 		font-weight: var(--font-weight-heading);
 		margin-bottom: var(--spacing-sm);
+		transition: color var(--transition-fast);
+	}
+
+	/* The title link inherits body colour, so hover is what tells the reader
+	   the card leads somewhere. */
+	.card-linked:hover .card-title {
+		color: var(--color-brand);
+	}
+
+	.card-more {
+		margin-top: auto;
+		padding-top: var(--spacing-md);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-brand);
 	}
 
 	/* Content is editor-authored HTML injected via set:html, so it carries no
@@ -85,7 +161,11 @@ const { _key, anchor, headline, subheadline, cards } = node;
 		padding-left: var(--spacing-lg);
 	}
 
+	/* Lift authored links above the stretched-link overlay so they stay
+	   clickable inside a card that is itself a link. */
 	.card-content :global(a) {
+		position: relative;
+		z-index: 1;
 		color: var(--color-brand);
 		text-decoration: underline;
 	}

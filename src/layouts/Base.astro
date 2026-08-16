@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-iconset/components";
 import { getMenu, getSiteSettings } from "emdash";
 import { EmDashHead } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
@@ -13,6 +14,13 @@ interface Props {
 }
 
 const { title, description, image } = Astro.props;
+
+// EmDash's auth middleware does a soft session check on public routes and
+// populates locals.user when one is signed in, so the header can show the
+// Admin link to editors only. Responses aren't edge-cached, so this is safe
+// to vary per request.
+const currentUser = Astro.locals.user;
+
 const settings = await getSiteSettings();
 const siteTitle = settings?.title || "Story & Measure";
 const fullTitle = title ? `${title} — ${siteTitle}` : siteTitle;
@@ -89,7 +97,7 @@ const pageCtx = createPublicPageContext({
 					}
 				</div>
 				<div class="nav-actions">
-					<a href="/_emdash/admin" class="nav-admin">Admin</a>
+					{currentUser && <a href="/_emdash/admin" class="nav-admin">Admin</a>}
 					<a href="/signup" class="btn btn-primary nav-cta">Get Started</a>
 				</div>
 			</nav>
@@ -131,29 +139,35 @@ const pageCtx = createPublicPageContext({
 				</div>
 			</div>
 			<div class="footer-bottom">
-				<p>
-					&copy; {new Date().getFullYear()}
-					{siteTitle}. All rights reserved.
-				</p>
-				<div class="theme-switcher">
+				<p class="footer-copyright">&copy; {new Date().getFullYear()} {siteTitle}. All rights reserved.</p>
+				<div class="theme-switcher" role="group" aria-label="Colour theme">
 					<button
 						type="button"
 						class="theme-btn"
 						data-theme="light"
-						aria-label="Light mode">Light</button
+						title="Light"
+						aria-label="Light mode"
 					>
+						<Icon name="ph:sun" aria-hidden="true" />
+					</button>
 					<button
 						type="button"
 						class="theme-btn"
 						data-theme="dark"
-						aria-label="Dark mode">Dark</button
+						title="Dark"
+						aria-label="Dark mode"
 					>
+						<Icon name="ph:moon" aria-hidden="true" />
+					</button>
 					<button
 						type="button"
 						class="theme-btn"
 						data-theme="system"
-						aria-label="System theme">System</button
+						title="System"
+						aria-label="System theme"
 					>
+						<Icon name="ph:desktop" aria-hidden="true" />
+					</button>
 				</div>
 				<p class="footer-powered">
 					Powered by <a href="https://emdashcms.com">EmDash</a>
@@ -183,7 +197,9 @@ const pageCtx = createPublicPageContext({
 
 			function updateActiveBtn(theme: string) {
 				themeBtns.forEach((btn) => {
-					btn.classList.toggle("active", btn.dataset.theme === theme);
+					const isActive = btn.dataset.theme === theme;
+					btn.classList.toggle("active", isActive);
+					btn.setAttribute("aria-pressed", String(isActive));
 				});
 			}
 
@@ -544,32 +560,47 @@ const pageCtx = createPublicPageContext({
 				color: var(--color-text);
 			}
 
+			/* Icon-only segmented control: one pill holding the three modes,
+			   so it reads as a single switch rather than three buttons. */
 			.theme-switcher {
 				display: flex;
-				gap: var(--spacing-xs);
+				gap: 2px;
+				padding: 3px;
+				background: var(--color-bg);
+				border: 1px solid var(--color-border);
+				border-radius: var(--radius-full);
 			}
 
 			.theme-btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 30px;
+				height: 30px;
 				background: transparent;
-				border: 1px solid var(--color-border);
+				border: none;
 				color: var(--color-muted);
-				font-family: var(--font-body);
-				font-size: var(--font-size-sm);
-				padding: var(--spacing-xs) var(--spacing-sm);
-				border-radius: var(--radius-sm);
+				font-size: 1.0625rem;
+				border-radius: var(--radius-full);
 				cursor: pointer;
-				transition: all var(--transition-fast);
+				transition:
+					color var(--transition-fast),
+					background var(--transition-fast);
 			}
 
 			.theme-btn:hover {
 				color: var(--color-text);
-				border-color: var(--color-text);
+				background: var(--color-surface);
+			}
+
+			.theme-btn:focus-visible {
+				outline: 2px solid var(--color-brand);
+				outline-offset: 1px;
 			}
 
 			.theme-btn.active {
-				background: var(--color-bg);
-				color: var(--color-text);
-				border-color: var(--color-brand);
+				color: var(--color-brand);
+				background: var(--color-surface);
 			}
 
 			@media (max-width: 768px) {
