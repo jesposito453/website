@@ -109,6 +109,15 @@ const secondaryCta =
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
+		/*
+		 * background-clip: text paints only inside the background (padding)
+		 * box, and --leading-tight (1.05) makes the last line box shorter than
+		 * the glyphs -- so descenders (g, y, commas in Fraunces) fall outside
+		 * it and render clipped. Pad the box to cover them; the matching
+		 * negative margin keeps the surrounding layout unchanged.
+		 */
+		padding-bottom: 0.2em;
+		margin-bottom: -0.2em;
 	}
 
 	.hero-subheadline {
