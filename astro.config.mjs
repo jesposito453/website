@@ -85,22 +85,20 @@ export default defineConfig({
 	],
 	fonts: [
 		{
+			// The display serif of the Story & Measure type system: title,
+			// heading, subtitle and quote styles. Only the four weights the
+			// system actually uses are loaded -- Regular, Medium, SemiBold,
+			// and Medium Italic (italics come from the styles list).
 			provider: fontProviders.google(),
-			name: "Inter",
-			cssVariable: "--font-body",
-			weights: [400, 500, 600, 700, 800],
-			fallbacks: ["sans-serif"],
-		},
-		{
-			// Display serif for headings -- closest Google stand-in for the
-			// "Swear Display" face used by the Ortiz Fluid reference design.
-			provider: fontProviders.google(),
-			name: "Fraunces",
+			name: "Cormorant Garamond",
 			cssVariable: "--font-display",
-			weights: ["400 700"],
+			weights: [400, 500, 600],
 			styles: ["normal", "italic"],
-			fallbacks: ["Georgia", "serif"],
+			fallbacks: ["Georgia", "Times New Roman", "serif"],
 		},
 	],
+	// Helvetica is the system half of the type system (subheading, section
+	// header, body, caption, eyebrow). It is not fetched as a webfont -- see
+	// the --font-body stack in src/styles/theme.css.
 	devToolbar: { enabled: false },
 });

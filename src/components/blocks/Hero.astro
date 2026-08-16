@@ -100,10 +100,12 @@ const secondaryCta =
 		max-width: 560px;
 	}
 
+	/* Title style: Cormorant Garamond Medium, 72px, tight leading. */
 	.hero-headline {
-		font-size: var(--font-size-5xl);
+		font-family: var(--font-heading);
+		font-size: var(--font-size-6xl);
 		font-weight: var(--font-weight-display);
-		line-height: var(--leading-tight);
+		line-height: var(--leading-title);
 		letter-spacing: var(--tracking-tight);
 		background: var(--gradient-headline);
 		-webkit-background-clip: text;
@@ -111,8 +113,8 @@ const secondaryCta =
 		background-clip: text;
 		/*
 		 * background-clip: text paints only inside the background (padding)
-		 * box, and --leading-tight (1.05) makes the last line box shorter than
-		 * the glyphs -- so descenders (g, y, commas in Fraunces) fall outside
+		 * box, and --leading-title (1.0) makes the last line box shorter than
+		 * the glyphs -- so descenders (g, y, commas in Cormorant) fall outside
 		 * it and render clipped. Pad the box to cover them; the matching
 		 * negative margin keeps the surrounding layout unchanged.
 		 */
@@ -163,7 +165,7 @@ const secondaryCta =
 		}
 
 		.hero-headline {
-			font-size: var(--font-size-4xl);
+			font-size: var(--font-size-5xl);
 		}
 
 		.hero-subheadline {

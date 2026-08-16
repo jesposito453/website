@@ -80,9 +80,18 @@ const { anchor, headline, testimonials } = node;
 		gap: var(--spacing-lg);
 	}
 
+	/*
+	 * Quote style -- Cormorant Garamond Medium Italic. The system's 36px
+	 * quote size is for a standalone pull quote; inside a three-up card
+	 * grid it sets to --font-size-2xl (28px), keeping the face, weight and
+	 * leading of the style at a size the column can hold.
+	 */
 	.testimonial-quote {
-		font-size: var(--font-size-lg);
-		line-height: var(--leading-normal);
+		font-family: var(--font-heading);
+		font-size: var(--font-size-2xl);
+		font-weight: var(--font-weight-quote);
+		font-style: italic;
+		line-height: var(--leading-quote);
 		color: var(--color-text);
 		flex: 1;
 	}
@@ -106,12 +115,14 @@ const { anchor, headline, testimonials } = node;
 	}
 
 	.testimonial-name {
-		font-weight: 600;
+		font-weight: var(--font-weight-subheading);
 		font-size: var(--font-size-sm);
 	}
 
+	/* Caption style */
 	.testimonial-role {
-		font-size: var(--font-size-xs);
+		font-size: var(--font-size-sm);
+		line-height: var(--leading-caption);
 		color: var(--color-muted);
 	}
 

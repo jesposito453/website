@@ -73,7 +73,7 @@ const { _key, anchor, headline, items } = node;
 		gap: var(--spacing-md);
 		padding: var(--spacing-lg);
 		font-size: var(--font-size-base);
-		font-weight: 600;
+		font-weight: var(--font-weight-subheading);
 		cursor: pointer;
 		list-style: none;
 	}
@@ -98,9 +98,12 @@ const { _key, anchor, headline, items } = node;
 		padding: 0 var(--spacing-lg) var(--spacing-lg);
 	}
 
+	/* Body style. These are prose paragraphs, not captions -- they stay at
+	   the body size and keep --color-muted only for hierarchy against the
+	   question above them. */
 	.faq-answer p {
-		font-size: var(--font-size-sm);
+		font-size: var(--font-size-base);
 		color: var(--color-muted);
-		line-height: var(--leading-relaxed);
+		line-height: var(--leading-body);
 	}
 </style>

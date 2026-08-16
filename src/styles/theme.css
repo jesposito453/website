@@ -34,18 +34,200 @@
 	--gradient-brand-soft: linear-gradient(135deg, #f6e1fd, #eff483);
 	--gradient-headline: linear-gradient(135deg, var(--color-text), var(--color-text));
 
-	/* Editorial serif display over Inter body */
-	--font-heading: var(--font-display, var(--font-body));
-	--font-weight-heading: 600;
-	--font-weight-display: 560;
+	/* ------------------------------------------------------------------
+	   Typography -- the Story & Measure type system.
+
+	   Two families, deliberately few weights:
+
+	     Cormorant Garamond  Regular 400 / Medium 500 / SemiBold 600 /
+	                         Medium Italic 500i
+	                         -> title, heading, subtitle, quote
+	     Helvetica           Regular 400 / Medium 500 / Bold 700
+	                         -> subheading, section header, body,
+	                            caption, eyebrow
+
+	   Only Cormorant Garamond is loaded over the network (see the fonts
+	   entry in astro.config.mjs). Helvetica is a system face, so
+	   --font-body is a stack: Helvetica Neue on macOS/iOS, Helvetica
+	   where it is installed, and Arial -- metric-compatible, so line
+	   breaks hold -- everywhere else.
+	   ------------------------------------------------------------------ */
+	--font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	--font-heading: var(--font-display, Georgia, "Times New Roman", serif);
+
+	/* Weights, named for the style that uses them */
+	--font-weight-display: 500; /* Title -- Cormorant Medium */
+	--font-weight-heading: 600; /* Heading -- Cormorant SemiBold */
+	--font-weight-subtitle: 400; /* Subtitle -- Cormorant Regular */
+	--font-weight-subheading: 500; /* Subheading -- Helvetica Medium */
+	--font-weight-body: 400; /* Body / caption -- Helvetica Regular */
+	--font-weight-label: 700; /* Section header, eyebrow -- Helvetica Bold */
+	--font-weight-quote: 500; /* Quote -- Cormorant Medium Italic */
+
+	/*
+	 * Type scale, anchored to the system's recommended web defaults. The
+	 * numeric token names are kept (components reference them) but each
+	 * one now lands on a named size.
+	 */
+	--font-size-xs: 0.75rem; /* 12px -- eyebrow */
+	--font-size-sm: 0.8125rem; /* 13px -- section header, caption */
+	--font-size-base: 1.0625rem; /* 17px -- body */
+	--font-size-lg: 1.25rem; /* 20px -- lead body */
+	--font-size-xl: 1.375rem; /* 22px -- subheading */
+	--font-size-2xl: 1.75rem; /* 28px -- quote in cards */
+	--font-size-3xl: 2rem; /* 32px -- subtitle */
+	--font-size-4xl: 2.875rem; /* 46px -- heading */
+	--font-size-5xl: 3.5rem; /* 56px -- reduced title */
+	--font-size-6xl: 4.5rem; /* 72px -- title */
+	--font-size-quote: 2.25rem; /* 36px -- standalone quote */
+
+	/* Line heights, one per named style */
+	--leading-title: 1;
+	--leading-heading: 1.05;
+	--leading-subtitle: 1.15;
+	--leading-subheading: 1.3;
+	--leading-quote: 1.2;
+	--leading-caption: 1.4;
+	--leading-body: 1.55;
+
+	/* The generic tokens components already use, remapped onto the above */
+	--leading-tight: var(--leading-title);
+	--leading-snug: var(--leading-heading);
+	--leading-normal: var(--leading-body);
+	--leading-relaxed: 1.6;
+
 	--tracking-tight: -0.015em;
 	--tracking-snug: -0.005em;
-	--leading-tight: 1.05;
+	--tracking-wide: 0.14em; /* ALL CAPS: section header, eyebrow */
 
 	/* Softer, more editorial shapes */
 	--radius-sm: 4px;
 	--radius: 8px;
 	--radius-lg: 14px;
+}
+
+/* ----------------------------------------------------------------------
+   Named type styles.
+
+   Every style in the system exists twice: once bound to the element that
+   naturally carries it (h1-h6, blockquote, small), and once as a .type-*
+   class for authored markup that needs the look without the semantics.
+   Reach for the class rather than restyling a block locally.
+
+     .type-title        Cormorant Medium        72px
+     .type-heading      Cormorant SemiBold      46px
+     .type-subtitle     Cormorant Regular       32px
+     .type-subheading   Helvetica Medium        22px
+     .type-section      Helvetica Bold          13px  ALL CAPS, tracked
+     .type-body         Helvetica Regular       17px
+     .type-quote        Cormorant Medium Italic 36px
+     .type-caption      Helvetica Regular       13px  muted
+     .type-eyebrow      Helvetica Bold          12px  ALL CAPS, tracked
+   ---------------------------------------------------------------------- */
+
+h1,
+.type-title {
+	font-family: var(--font-heading);
+	font-size: var(--font-size-6xl);
+	font-weight: var(--font-weight-display);
+	line-height: var(--leading-title);
+	letter-spacing: var(--tracking-tight);
+}
+
+h2,
+.type-heading {
+	font-family: var(--font-heading);
+	font-size: var(--font-size-4xl);
+	font-weight: var(--font-weight-heading);
+	line-height: var(--leading-heading);
+	letter-spacing: var(--tracking-snug);
+}
+
+h3,
+.type-subtitle {
+	font-family: var(--font-heading);
+	font-size: var(--font-size-3xl);
+	font-weight: var(--font-weight-subtitle);
+	line-height: var(--leading-subtitle);
+	letter-spacing: normal;
+}
+
+h4,
+.type-subheading {
+	font-family: var(--font-body);
+	font-size: var(--font-size-xl);
+	font-weight: var(--font-weight-subheading);
+	line-height: var(--leading-subheading);
+	letter-spacing: normal;
+}
+
+/* h5/h6 are the small tracked labels that introduce a block */
+h5,
+h6,
+.type-section {
+	font-family: var(--font-body);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-label);
+	line-height: var(--leading-subheading);
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+}
+
+.type-body {
+	font-family: var(--font-body);
+	font-size: var(--font-size-base);
+	font-weight: var(--font-weight-body);
+	line-height: var(--leading-body);
+}
+
+blockquote,
+.type-quote {
+	font-family: var(--font-heading);
+	font-size: var(--font-size-quote);
+	font-weight: var(--font-weight-quote);
+	font-style: italic;
+	line-height: var(--leading-quote);
+	letter-spacing: normal;
+}
+
+.type-caption {
+	font-family: var(--font-body);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-body);
+	line-height: var(--leading-caption);
+	color: var(--color-muted);
+}
+
+.type-eyebrow {
+	font-family: var(--font-body);
+	font-size: var(--font-size-xs);
+	font-weight: var(--font-weight-label);
+	line-height: var(--leading-caption);
+	letter-spacing: var(--tracking-wide);
+	text-transform: uppercase;
+}
+
+/* Section intros: the headline is a Heading, the subheadline lead body. */
+.section-headline {
+	font-family: var(--font-heading);
+	font-size: var(--font-size-4xl);
+	font-weight: var(--font-weight-heading);
+	line-height: var(--leading-heading);
+	letter-spacing: var(--tracking-snug);
+}
+
+.section-subheadline {
+	font-size: var(--font-size-lg);
+	line-height: var(--leading-body);
+}
+
+/*
+ * Helvetica has no SemiBold. The base styles set 600 on buttons and small
+ * labels, which browsers either round to Bold or synthesise -- both read
+ * as heavier than the system allows. Medium is the intended weight.
+ */
+.btn {
+	font-weight: var(--font-weight-subheading);
 }
 
 /* Tighter vertical rhythm between page sections. The base default pads
@@ -79,6 +261,24 @@
 }
 .has-text-align-justify {
 	text-align: justify;
+}
+
+/*
+ * The scale above is the desktop system. A 72px Cormorant title on a
+ * phone runs to three or four words a line, so the display end of the
+ * scale steps down at narrow widths. Everything reads these tokens, so
+ * only the tokens need restating -- no per-component media queries.
+ */
+@media (max-width: 768px) {
+	:root {
+		--font-size-6xl: 3rem; /* 48px -- title */
+		--font-size-5xl: 2.5rem; /* 40px */
+		--font-size-4xl: 2.125rem; /* 34px -- heading */
+		--font-size-3xl: 1.625rem; /* 26px -- subtitle */
+		--font-size-quote: 1.625rem; /* 26px -- quote */
+		--font-size-2xl: 1.375rem; /* 22px */
+		--font-size-xl: 1.25rem; /* 20px -- subheading */
+	}
 }
 
 /* Light-mode fallback for browsers without light-dark() */

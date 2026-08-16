@@ -251,8 +251,10 @@ const pageContent = page?.data.content;
 		align-items: start;
 	}
 
+	/* Heading style, held to the subtitle size -- it shares the row with the
+	   form card rather than opening the page. */
 	.contact-info h2 {
-		font-size: var(--font-size-2xl);
+		font-size: var(--font-size-3xl);
 		margin-bottom: var(--spacing-md);
 	}
 
@@ -277,9 +279,13 @@ const pageContent = page?.data.content;
 		font-size: 1.25rem;
 	}
 
+	/* Section header style: this labels the address below it. */
 	.contact-method-content h4 {
 		font-size: var(--font-size-sm);
-		font-weight: 600;
+		font-weight: var(--font-weight-label);
+		letter-spacing: var(--tracking-wide);
+		text-transform: uppercase;
+		color: var(--color-muted);
 		margin-bottom: var(--spacing-xs);
 	}
 

@@ -35,8 +35,12 @@ import Base from "../layouts/Base.astro";
 		margin-bottom: var(--spacing-lg);
 	}
 
+	/* Heading rather than Title -- the oversized 404 above it is the display
+	   element on this page. */
 	.not-found h1 {
-		font-size: var(--font-size-3xl);
+		font-size: var(--font-size-4xl);
+		font-weight: var(--font-weight-heading);
+		line-height: var(--leading-heading);
 		margin-bottom: var(--spacing-md);
 	}
 

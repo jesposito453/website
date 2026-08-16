@@ -46,7 +46,7 @@ This template ships with `.mcp.json`, `.cursor/mcp.json`, and `.vscode/mcp.json`
 
 A SaaS-style landing page template with modular content blocks: hero, features, testimonials, pricing, FAQ, plus a real contact page. Designed for product marketing sites, app landing pages, and anything that needs a hero + features + pricing + CTA flow.
 
-Bolder than the blog and portfolio templates: vibrant gradient accents, isometric illustration in the hero, heavy headline weights. The voice is product-confident without tipping into stock SaaS cliche.
+The voice is editorial rather than stock SaaS: a Cormorant Garamond display serif over a Helvetica working face, warm ground, orange accent, and illustration in the hero. Contrast comes from the scale and the family switch, not from heavy weights.
 
 ## Pages
 
@@ -94,7 +94,32 @@ Constraints worth remembering:
 
 ## Visual character
 
-Typography is **Inter** on `--font-body` with weights up to 800 for headline emphasis (`--font-weight-display: 800` on hero and section headlines, `--font-weight-heading: 700` on other headings). There is no mono font, no serif. Headline tracking is tight (`--tracking-tight`).
+### Typography -- the Story & Measure type system
+
+Two families, deliberately few weights. **Cormorant Garamond** (`--font-heading`, loaded as `--font-display`) carries the editorial levels; **Helvetica** (`--font-body`) carries everything that works: UI, body, labels.
+
+| Style          | Font / weight                         | Web size | Line height | Treatment               | Element / class                            |
+| -------------- | ------------------------------------- | -------- | ----------- | ----------------------- | ------------------------------------------ |
+| Title          | Cormorant Garamond Medium 500         | 72px     | 1.0         | Sentence or Title case  | `h1`, `.type-title`                        |
+| Heading        | Cormorant Garamond SemiBold 600       | 46px     | 1.05        | Sentence or Title case  | `h2`, `.type-heading`, `.section-headline` |
+| Subtitle       | Cormorant Garamond Regular 400        | 32px     | 1.15        | Sentence case           | `h3`, `.type-subtitle`                     |
+| Subheading     | Helvetica Medium 500                  | 22px     | 1.3         | Sentence case           | `h4`, `.type-subheading`                   |
+| Section Header | Helvetica Bold 700                    | 13px     | 1.3         | ALL CAPS, wide tracking | `h5`, `h6`, `.type-section`                |
+| Body           | Helvetica Regular 400                 | 17px     | 1.55        | Sentence case           | `body`, `.type-body`                       |
+| Quote          | Cormorant Garamond Medium Italic 500i | 36px     | 1.2         | Generous whitespace     | `blockquote`, `.type-quote`                |
+| Caption        | Helvetica Regular 400                 | 13px     | 1.4         | Sentence case, muted    | `.type-caption`                            |
+| Eyebrow        | Helvetica Bold 700                    | 12px     | 1.4         | ALL CAPS, wide tracking | `.type-eyebrow`                            |
+
+Every style exists twice: on the element that naturally carries it, and as a `.type-*` class for authored markup that needs the look without the semantics. Reach for the class rather than restyling a block locally.
+
+Weight tokens are named for the style they serve -- `--font-weight-display` (Title), `--font-weight-heading` (Heading), `--font-weight-subtitle`, `--font-weight-subheading`, `--font-weight-body`, `--font-weight-label` (caps labels), `--font-weight-quote`. Line heights likewise: `--leading-title`, `--leading-heading`, `--leading-subtitle`, `--leading-subheading`, `--leading-quote`, `--leading-caption`, `--leading-body`. The older generic names (`--leading-tight` / `--leading-snug` / `--leading-normal`) still exist and alias onto title / heading / body.
+
+Two rules the system depends on:
+
+- **Never use weight 600 on Helvetica text.** Helvetica has no SemiBold, so browsers synthesise it or round to Bold, and it reads heavier than the system allows. Use `--font-weight-subheading` (500) or `--font-weight-label` (700).
+- **Never mix the families within a style.** Cormorant is for title / heading / subtitle / quote; Helvetica is for everything else. When a scoped component rule sets a size on an `h1`-`h3`, set `font-family: var(--font-body)` explicitly if the intent is the sans face -- otherwise the element rule supplies the serif.
+
+The display end of the scale steps down at `max-width: 768px` by restating the size tokens in `theme.css`, so no component needs its own type media query. Headline tracking stays slightly tight (`--tracking-tight`); the two ALL CAPS styles use `--tracking-wide` (0.14em).
 
 Colour is the loudest of any template here. The default palette is:
 
@@ -114,7 +139,11 @@ Design tokens live in `src/styles/tokens.css` with their default values. To rest
 
 Colours are defined with `light-dark(<light>, <dark>)`, so each token carries both modes. Overriding with a plain colour changes light and dark at once; use `light-dark()` in the override to keep them distinct. There is no separate dark palette to maintain.
 
-Webfonts are configured in `astro.config.mjs` under `fonts:`. To swap the typeface, change the `name:` for the entry bound to `cssVariable: "--font-body"`. Inter has 5 weights loaded (400-800) for hero impact -- if you swap, ensure the replacement has comparable weight range. Geist, Plus Jakarta Sans, Manrope, and DM Sans all work well as replacements. For a system font, or a separate heading face, override `--font-body` / `--font-heading` in `theme.css`. A softer voice (editorial, luxury) usually also wants `--font-weight-display: 700` or lower.
+Only one webfont is fetched: Cormorant Garamond, configured in `astro.config.mjs` under `fonts:` and bound to `cssVariable: "--font-display"` (400/500/600, normal + italic -- exactly the four faces the system uses). `Base.astro` preloads it with a single `<Font cssVariable="--font-display" />`.
+
+Helvetica is a system face and is **not** fetched. `--font-body` is a stack declared in `theme.css`: `"Helvetica Neue", Helvetica, Arial, sans-serif` -- Helvetica Neue on macOS/iOS, Arial (metric-compatible, so line breaks hold) elsewhere.
+
+To swap the display serif, change the `name:` on that fonts entry and keep the weight list; the replacement needs Regular, Medium, SemiBold, and a Medium Italic. EB Garamond, Cormorant, Crimson Pro, and Newsreader are the closest substitutes. To swap the sans, override `--font-body` in `theme.css`; if the replacement has a true SemiBold, `--font-weight-subheading` can move to 600.
 
 CSS variables worth knowing (see `tokens.css` for the full list):
 
@@ -123,8 +152,11 @@ CSS variables worth knowing (see `tokens.css` for the full list):
 - `--gradient-brand`, `--gradient-brand-strong`, `--gradient-brand-soft`, `--gradient-headline`
 - `--color-bg`, `--color-surface`, `--color-text`, `--color-muted`, `--color-border`
 - `--color-success`, `--color-warning`, `--color-danger`
-- `--font-body`, `--font-heading`, `--font-weight-heading` (700), `--font-weight-display` (800)
-- `--font-size-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl,6xl}` -- type scale up to 4.5rem for the largest hero
+- `--font-body` (Helvetica stack), `--font-heading` / `--font-display` (Cormorant Garamond)
+- `--font-weight-{display,heading,subtitle,subheading,body,label,quote}` -- see the type system table above
+- `--leading-{title,heading,subtitle,subheading,quote,caption,body}`
+- `--font-size-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl,6xl}` plus `--font-size-quote` -- 12px through 72px
+- `--tracking-tight`, `--tracking-snug`, `--tracking-wide` (0.14em, for the ALL CAPS styles)
 - `--radius-sm` (6px), `--radius` (10px), `--radius-lg` (16px), `--radius-full`
 - `--shadow-sm`, `--shadow`, `--shadow-lg`, `--shadow-xl`
 

@@ -63,7 +63,8 @@ const pageCtx = createPublicPageContext({
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{fullTitle}</title>
 		<EmDashHead page={pageCtx} />
-		<Font cssVariable="--font-body" preload />
+		{/* Only the display serif is fetched. The body face is the system
+		    Helvetica stack defined in src/styles/theme.css. */}
 		<Font cssVariable="--font-display" preload />
 		<script is:inline>
 			// Apply an explicit theme choice immediately to prevent flash.
@@ -433,9 +434,11 @@ const pageCtx = createPublicPageContext({
 			}
 
 			.site-logo {
-				font-size: var(--font-size-xl);
+				font-family: var(--font-heading);
+				font-size: var(--font-size-3xl);
 				font-weight: var(--font-weight-display);
-				letter-spacing: var(--tracking-tight);
+				line-height: var(--leading-subtitle);
+				letter-spacing: var(--tracking-snug);
 				background: var(--gradient-brand);
 				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
@@ -504,9 +507,11 @@ const pageCtx = createPublicPageContext({
 			}
 
 			.footer-logo {
-				font-size: var(--font-size-xl);
+				font-family: var(--font-heading);
+				font-size: var(--font-size-3xl);
 				font-weight: var(--font-weight-display);
-				letter-spacing: var(--tracking-tight);
+				line-height: var(--leading-subtitle);
+				letter-spacing: var(--tracking-snug);
 			}
 
 			.footer-logo-img {
@@ -526,9 +531,13 @@ const pageCtx = createPublicPageContext({
 				gap: var(--spacing-xl);
 			}
 
+			/* Section header style: Helvetica Bold, all caps, wide tracking */
 			.footer-col h4 {
+				font-family: var(--font-body);
 				font-size: var(--font-size-sm);
-				font-weight: 600;
+				font-weight: var(--font-weight-label);
+				letter-spacing: var(--tracking-wide);
+				text-transform: uppercase;
 				margin-bottom: var(--spacing-md);
 			}
 
@@ -621,13 +630,6 @@ const pageCtx = createPublicPageContext({
 
 				.theme-switcher {
 					order: -1;
-				}
-
-				h1 {
-					font-size: var(--font-size-4xl);
-				}
-				h2 {
-					font-size: var(--font-size-2xl);
 				}
 			}
 
